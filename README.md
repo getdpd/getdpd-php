@@ -4,7 +4,7 @@ The DPD API allows you to easily integrate your website with DPD.
 
 ## What's Included
 
-The DPD cart API currently lets you list your storefronts (websites) and products.
+The API is read-only. It gives you access to storefronts, products, purchases, and subscribers.
 
 ## Requirements
 
@@ -13,7 +13,7 @@ PHP 5.2 or better with the cURL extension.
 ## Usage
 
     <?php
-    require_once "DPDCartApi.class.php";
+    require_once "GetDPDApi.php";
     
     $dpd = new GetDPDApi("your username", "your key");
     try {
@@ -41,14 +41,14 @@ You can verify a subscriber's subscription status with the `verifySubscriber` me
 
     <?php
     $storefront_id = 1234;
-    $dpd->verifySubscriberById($storefront_id, array("id" => 123));
+    $dpd->verifySubscriber($storefront_id, array("id" => 123));
     ?>
 
 or
 
     <?php
     $storefront_id = 1234;
-    $dpd->verifySubscriberByUsername($storefront_id, array('username' => 'example@example.com'));
+    $dpd->verifySubscriber($storefront_id, array('username' => 'example@example.com'));
     ?>
 
 Both calls return the subscriber's status. Any subscriber with the `TRIAL`, `ACTIVE` or `CANCELED` status has access to the
