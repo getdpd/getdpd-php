@@ -53,3 +53,15 @@ or
 
 Both calls return the subscriber's status. Any subscriber with the `TRIAL`, `ACTIVE` or `CANCELED` status has access to the
 subscriber area in your DPD account.
+
+### Verifying A Notification
+
+You can verify a notification from the URL integration by using the
+`verifyNotification` method.
+
+    <?php
+    $dpd->verifyNotification($_POST);
+    ?>
+
+It will return either `VERIFIED` on success or `INVALID` if the
+notification did not come from GetDPD.

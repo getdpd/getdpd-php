@@ -77,6 +77,11 @@ class GetDPDApi
     return $this->doApiRequest("/storefronts/{$storefront_id}/subscribers/verify", $params, 'GET');
   }
 
+  public function verifyNotification($params)
+  {
+    return $this->doApiRequest("/notification/verify", $params, 'POST');
+  }
+
   public function doApiRequest($action, $params, $method='GET')
   {
     $this->success = false;
