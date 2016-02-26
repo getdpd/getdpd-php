@@ -17,13 +17,17 @@ PHP 5.2 or better with the cURL extension.
     
     $dpd = new GetDPDApi("your username", "your key");
     try {
-      $storefronts = $dpd->getStorefronts();
-      $products = $dpd->listProducts($storefronts[0]["id"]);
+        // iterate over all of your stores
+        foreach($dpd->listStorefronts() as $storefront) {
+            // Iterate over your stores' products
+            foreach($dpd->listProducts($storefront["id"]) as $product)
+            {
+              // Do something with $product;
+            }
+        }
     } catch(GetDPDApiError $e) {
       die("Error! ".$e);
     }
-    
-    var_export($products);
     ?>
 
 See the [full reference](http://getdpd.com/docs/api/index.html) ([pdf version](http://getdpd.com/docs/api/DPDAPIReference.pdf))
@@ -65,3 +69,33 @@ You can verify a notification from the URL integration by using the
 
 It will return either `VERIFIED` on success or `INVALID` if the
 notification did not come from GetDPD.
+
+### Sample IPN handler
+
+    <?php
+    /*
+        dpd_ipn_notify.php
+        Sample notification script to use with DPD's Notification URL integration.
+        This script will show you how to use the GetDPDApi to download the details
+        of a purchase POSTed to your notification URL. You can use that data to
+        record in your own database, register background processes, subscribe your
+        customers to an email list, etc.
+    */
+    require_once "GetDPDApi.php";
+    // Fill in your credentials from the DPD Access information from the bottom
+    // of this page: https://getdpd.com/user/profile
+    $dpd = new GetDPDApi("<your username>", "<your api key>");
+    try {
+        // Verify the POST parameters to make sure we're dealing with a valid
+        // purchase notification
+        if($dpd->verifyNotification($_POST) !== 'VERIFIED')
+            die("Error: notification didn't come from getdpd.com");
+        // Look up purchase details txn_id is POSTed to the script.
+        // Documentation to posted variables:
+        // http://support.getdpd.com/hc/en-us/articles/201282853-IPN-Notification-URL
+        $purchase = $dpd->getPurchase(null, $_POST["txn_id"]);
+        // Do something with the purchase here:
+        var_export($purchase);
+    } catch(GetDPDApiError $e) {
+        die("Error! ".$e->getMessage());
+    }
