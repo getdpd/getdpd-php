@@ -17,7 +17,7 @@ require_once 'GetDPDApiCollection.php';
 class GetDPDApiHelper
 {
   private
-    $base_uri = "https://api.getdpd.com/v2",
+    $base_uri = "https://api.getdpd.com/v2/",
     $headers = null,
     $user = null,
     $key = null;
@@ -103,7 +103,6 @@ class GetDPDApiHelper
 
   protected function buildURI($action)
   {
-    return "http://api2.dpd.laptop/v2/".ltrim($action, '/');
     return $this->base_uri.ltrim($action, '/');
   }
 
